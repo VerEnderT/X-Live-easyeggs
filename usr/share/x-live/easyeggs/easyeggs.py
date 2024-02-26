@@ -85,9 +85,9 @@ class MyWidget(QWidget):
         self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/eggs.yaml"))        
         layout.addWidget(self.btn_eggsyml)
 
-        self.btn_calamares = QPushButton("calamares konfiguration", self)
-        self.btn_calamares.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
-        layout.addWidget(self.btn_calamares)
+        self.btn_calamaresyml = QPushButton("calamares konfiguration", self)
+        self.btn_calamaresyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
+        layout.addWidget(self.btn_calamaresyml)
 
 
         self.label_theme = QLabel("Theming")
