@@ -26,7 +26,7 @@ class MyWidget(QWidget):
         # color yellow #635313
         # color green #0ca057
         pe_website = "https://sourceforge.net/projects/penguins-eggs/files/DEBS/"
-        dl_befehl = 'exo-open --launch WebBrowser https://sourceforge.net/projects/penguins-eggs/files/DEBS/'
+        dl_befehl = 'xdg-open https://sourceforge.net/projects/penguins-eggs/files/DEBS/'
         cal_befehl = 'bash -c /usr/share/x-live/easyeggs/install_calamares.sh'
 
 
