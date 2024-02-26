@@ -1,5 +1,6 @@
 #!/bin/bash
 clear
+sudo find / -name penguins-eggs.desktop -delete
 
 echo -n > ~/.local/share/recently-used.xbel
 echo "zuletzt genutzte dateien wurden bereinigt"
