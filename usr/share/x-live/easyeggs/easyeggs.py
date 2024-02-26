@@ -88,13 +88,6 @@ class MyWidget(QWidget):
         self.btn_eggsyml = QPushButton("calamares konfiguration", self)
         self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
         layout.addWidget(self.btn_eggsyml)
-        self.btn_uefi = QPushButton("UEFI Boot konfiguration", self)
-        self.btn_uefi.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/templates/grub.template"))        
-        #layout.addWidget(self.btn_uefi)
-        self.btn_bios = QPushButton("BIOS Boot konfiguration", self)
-        self.btn_bios.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/templates/isolinux.template"))        
-        #layout.addWidget(self.btn_bios)
-
 
         self.label_theme = QLabel("Theming")
         layout.addWidget(self.label_theme)
