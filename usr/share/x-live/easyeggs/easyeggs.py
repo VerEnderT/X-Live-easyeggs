@@ -85,9 +85,10 @@ class MyWidget(QWidget):
         self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/eggs.yaml"))        
         layout.addWidget(self.btn_eggsyml)
 
-        self.btn_eggsyml = QPushButton("calamares konfiguration", self)
-        self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
-        layout.addWidget(self.btn_eggsyml)
+        self.btn_calamares = QPushButton("calamares konfiguration", self)
+        self.btn_calamares.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
+        layout.addWidget(self.btn_calamares)
+
 
         self.label_theme = QLabel("Theming")
         layout.addWidget(self.label_theme)
@@ -113,9 +114,9 @@ class MyWidget(QWidget):
         self.btn_release = QPushButton("Release Iso erstellen", self)
         self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/release-eggs.sh"))        
         layout.addWidget(self.btn_release)
-        self.btn_release = QPushButton("Backup Iso erstellen", self)
-        self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/backup-eggs.sh"))        
-        layout.addWidget(self.btn_release)
+        self.btn_backup = QPushButton("Backup Iso erstellen", self)
+        self.btn_backup.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/backup-eggs.sh"))        
+        layout.addWidget(self.btn_backup)
 
         self.label_user = QLabel("Bereinigung")
         layout.addWidget(self.label_user)
