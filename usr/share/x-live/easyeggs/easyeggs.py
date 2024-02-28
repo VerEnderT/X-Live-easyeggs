@@ -16,22 +16,18 @@ class MyWidget(QWidget):
 
     def initUI(self):
         self.faktor = app.desktop().height()/720
-        breite = int(250 * self.faktor)
-        hoehe = int(500 * self.faktor)
+        breite = int(350 * self.faktor)
+        hoehe = int(560 * self.faktor)
         bts=int(16 * self.faktor)
         sts=int(24 * self.faktor)
         btn_sel_color = '#1f8973'
         pos_x = int((app.desktop().width()-breite)/2)
         pos_y = int((app.desktop().height()-hoehe)/2)
-        # color yellow #635313
-        # color green #0ca057
         pe_website = "https://sourceforge.net/projects/penguins-eggs/files/DEBS/"
-        dl_befehl = 'xdg-open https://sourceforge.net/projects/penguins-eggs/files/DEBS/'
+        dl_befehl = 'exo-open --launch WebBrowser https://sourceforge.net/projects/penguins-eggs/files/DEBS/'
         cal_befehl = 'bash -c /usr/share/x-live/easyeggs/install_calamares.sh'
 
-
         #  StyleSheet 
-        
         self.ssbtn1=str("""
             QWidget {
             background-color: #000000;
@@ -58,12 +54,12 @@ class MyWidget(QWidget):
             }
             """)
             
-
         # Erstelle ein Layout für das Hauptfenster
         layout = QVBoxLayout()
-        installed = self.com("apt list --installed")
-        check_eggs = installed.find("\neggs/")
-        check_calamares = installed.find("calamares/")
+        check_eggs = self.com("which eggs").find("eggs")
+        check_calamares = self.com("which calamares").find("calamares")
+        print(check_eggs)
+        print(check_calamares)
 
         if check_calamares == -1 or check_eggs == -1:
             self.label_install = QLabel("Installer")
@@ -77,7 +73,6 @@ class MyWidget(QWidget):
             self.btn_calamares.clicked.connect(lambda: os.system(cal_befehl))        
             layout.addWidget(self.btn_calamares)
 
-
         self.label_conf = QLabel("Konfigurationen")
         layout.addWidget(self.label_conf)
 
@@ -85,10 +80,15 @@ class MyWidget(QWidget):
         self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/eggs.yaml"))        
         layout.addWidget(self.btn_eggsyml)
 
-        self.btn_calamaresyml = QPushButton("calamares konfiguration", self)
-        self.btn_calamaresyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
-        layout.addWidget(self.btn_calamaresyml)
-
+        self.btn_eggsyml = QPushButton("calamares konfiguration", self)
+        self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
+        layout.addWidget(self.btn_eggsyml)
+        #self.btn_uefi = QPushButton("UEFI Boot konfiguration", self)
+        #self.btn_uefi.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/templates/grub.template"))        
+        #layout.addWidget(self.btn_uefi)
+        #self.btn_bios = QPushButton("BIOS Boot konfiguration", self)
+        #self.btn_bios.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/templates/isolinux.template"))        
+        #layout.addWidget(self.btn_bios)
 
         self.label_theme = QLabel("Theming")
         layout.addWidget(self.label_theme)
@@ -106,25 +106,32 @@ class MyWidget(QWidget):
         self.btn_copyuser = QPushButton("nach /etc/skel kopieren", self)
         self.btn_copyuser.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/copydata.sh"))        
         layout.addWidget(self.btn_copyuser)
-
         
         self.label_user = QLabel("Iso erstellen")
         layout.addWidget(self.label_user)
         
         self.btn_release = QPushButton("Release Iso erstellen", self)
+        self.btn_release.clicked.connect(lambda: os.system("sudo eggs produce --release --nointeractive --standard"))        
+        layout.addWidget(self.btn_release)
+        self.btn_release = QPushButton("Backup Iso erstellen", self)
+        self.btn_release.clicked.connect(lambda: os.system("sudo eggs produce --basename=Backup --nointeractive --standard"))        
+        layout.addWidget(self.btn_release)
+
+        self.label_user = QLabel("aufräumen | User Daten | Iso erstellen")
+        layout.addWidget(self.label_user)
+        
+        self.btn_release = QPushButton("Release Iso erstellen", self)
         self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/release-eggs.sh"))        
         layout.addWidget(self.btn_release)
-        self.btn_backup = QPushButton("Backup Iso erstellen", self)
-        self.btn_backup.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/backup-eggs.sh"))        
-        layout.addWidget(self.btn_backup)
+        self.btn_release = QPushButton("Backup Iso erstellen", self)
+        self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/backup-eggs.sh"))        
+        layout.addWidget(self.btn_release)
 
         self.label_user = QLabel("Bereinigung")
         layout.addWidget(self.label_user)
         self.btn_cleanisos = QPushButton("erstellte isos bereinigen", self)
         self.btn_cleanisos.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/cleanisos.sh"))          
         layout.addWidget(self.btn_cleanisos)
-
-
 
         # Setze das Layout für das Hauptfenster
         self.setLayout(layout)
@@ -133,25 +140,12 @@ class MyWidget(QWidget):
         self.setGeometry(pos_x, pos_y,0,0)
         self.setWindowIcon(QIcon.fromTheme('settings'))  # Setze das systemweite Theme-Icon als Fenstericon
         self.setWindowTitle("X-Live easyeggs")
-        #self.setMinimumSize(breite, hoehe)  # Festlegen der Größe auf 600x400 Pixel
+        self.setMinimumHeight(hoehe)  # Festlegen der Größe auf 600x400 Pixel
         self.setFixedWidth(breite)
         
-
-        #self.setStyleSheet("background: rgba(80,80, 80, 00);")  # Hintergrundfarbe festlegen
-        #self.setAttribute(Qt.WA_TranslucentBackground)
-        #self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)  # Entfernt die Fensterdekoration
         self.show()
         os.system("bash -c clear")
         os.system("echo && echo 'X-Live easyeggs erfolgreich gestartet' && echo")
-
-
-    #@staticmethod
-    #def com(self,cmd):
-    #    command = cmd.split(" ")
-    #    print(command)
-    #    complete = subprocess.run(command, capture_output=True)
-    #    ergebnis = str(complete.stdout) 
-    #    return ergebnis
 
 
     def com(self, cmd):
