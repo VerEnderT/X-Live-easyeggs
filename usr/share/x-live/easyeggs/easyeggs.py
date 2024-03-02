@@ -16,8 +16,8 @@ class MyWidget(QWidget):
 
     def initUI(self):
         self.faktor = app.desktop().height()/720
-        breite = int(350 * self.faktor)
-        hoehe = int(560 * self.faktor)
+        breite = int(320 * self.faktor)
+        hoehe = int(400 * self.faktor)
         bts=int(16 * self.faktor)
         sts=int(24 * self.faktor)
         btn_sel_color = '#1f8973'
@@ -26,33 +26,31 @@ class MyWidget(QWidget):
         pe_website = "https://sourceforge.net/projects/penguins-eggs/files/DEBS/"
         dl_befehl = 'exo-open --launch WebBrowser https://sourceforge.net/projects/penguins-eggs/files/DEBS/'
         cal_befehl = 'bash -c /usr/share/x-live/easyeggs/install_calamares.sh'
+        self.sel_color="#101030"
 
         #  StyleSheet 
-        self.ssbtn1=str("""
+
+        self.sssgrau=str("""
             QWidget {
-            background-color: #000000;
+            font-size: """ + str(int(sts*0.62)) + """px; 
+            background: rgba(35,37, 46, 255);
+            color: white
             }
             QPushButton {
-            font-size: """ + str(int(sts*0.7)) + """px; 
-            text-align: center;      
-            border-radius: 5px;
-            background-color: """ + btn_sel_color  + """;
-            border: 2px solid """ + btn_sel_color  + """;
-            padding-top: 2px;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-bottom: 2px;
-            color: white;
+            font-size: """ + str(int(sts*0.55)) + """px; 
+            background: rgba(90, 92, 101, 115);
+            color: rgba(250, 250, 250, 255);
+            border-radius: 8px;
+            border: 1px solid #626262
             }
-            QLabel {
-            font-size: """ + str(int(sts*0.7)) + """px;   
-            padding-top: 2px;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-bottom: 2px;
-            color: white;
+            QPushButton:hover {
+            color: rgba(250, 250, 250, 255);
+            background: """ + self.sel_color + """;
+            border-radius: 8px
             }
-            """)
+            """
+            )
+       
             
         # Erstelle ein Layout für das Hauptfenster
         layout = QVBoxLayout()
@@ -75,56 +73,45 @@ class MyWidget(QWidget):
 
         self.label_conf = QLabel("Konfigurationen")
         layout.addWidget(self.label_conf)
-
         self.btn_eggsyml = QPushButton("eggs konfiguration", self)
-        self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/eggs.yaml"))        
+        self.btn_eggsyml.clicked.connect(lambda: os.system("sudo exo-open /etc/penguins-eggs.d/eggs.yaml"))        
         layout.addWidget(self.btn_eggsyml)
-
         self.btn_eggsyml = QPushButton("calamares konfiguration", self)
-        self.btn_eggsyml.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
+        self.btn_eggsyml.clicked.connect(lambda: os.system("sudo exo-open /etc/penguins-eggs.d/distros/*/calamares/settings.yml"))        
         layout.addWidget(self.btn_eggsyml)
-        #self.btn_uefi = QPushButton("UEFI Boot konfiguration", self)
-        #self.btn_uefi.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/templates/grub.template"))        
-        #layout.addWidget(self.btn_uefi)
-        #self.btn_bios = QPushButton("BIOS Boot konfiguration", self)
-        #self.btn_bios.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/templates/isolinux.template"))        
-        #layout.addWidget(self.btn_bios)
 
         self.label_theme = QLabel("Theming")
         layout.addWidget(self.label_theme)
-        
         self.btn_branding = QPushButton("Calamares Branding", self)
-        self.btn_branding.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/eggs/theme/calamares/branding/"))        
+        self.btn_branding.clicked.connect(lambda: os.system("sudo exo-open /etc/penguins-eggs.d/addons/eggs/theme/calamares/branding/"))        
         layout.addWidget(self.btn_branding)
         self.btn_liveboot = QPushButton("Live Boot", self)
-        self.btn_liveboot.clicked.connect(lambda: os.system("sudo xdg-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/"))        
+        self.btn_liveboot.clicked.connect(lambda: os.system("sudo exo-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/"))        
         layout.addWidget(self.btn_liveboot)
         
+
+        self.label_user = QLabel("Bereinigung + User Daten + Iso erstellen")
+        layout.addWidget(self.label_user)
+        self.btn_release = QPushButton("Release Iso erstellen", self)
+        self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/release-eggs.sh"))        
+        layout.addWidget(self.btn_release)
+        self.btn_release = QPushButton("Backup Iso erstellen", self)
+        self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/backup-eggs.sh"))        
+        layout.addWidget(self.btn_release)
+
         self.label_user = QLabel("User Daten")
         layout.addWidget(self.label_user)
-        
         self.btn_copyuser = QPushButton("nach /etc/skel kopieren", self)
         self.btn_copyuser.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/copydata.sh"))        
         layout.addWidget(self.btn_copyuser)
         
         self.label_user = QLabel("Iso erstellen")
         layout.addWidget(self.label_user)
-        
         self.btn_release = QPushButton("Release Iso erstellen", self)
         self.btn_release.clicked.connect(lambda: os.system("sudo eggs produce --release --nointeractive --standard"))        
         layout.addWidget(self.btn_release)
         self.btn_release = QPushButton("Backup Iso erstellen", self)
         self.btn_release.clicked.connect(lambda: os.system("sudo eggs produce --basename=Backup --nointeractive --standard"))        
-        layout.addWidget(self.btn_release)
-
-        self.label_user = QLabel("aufräumen | User Daten | Iso erstellen")
-        layout.addWidget(self.label_user)
-        
-        self.btn_release = QPushButton("Release Iso erstellen", self)
-        self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/release-eggs.sh"))        
-        layout.addWidget(self.btn_release)
-        self.btn_release = QPushButton("Backup Iso erstellen", self)
-        self.btn_release.clicked.connect(lambda: os.system("/usr/share/x-live/easyeggs/backup-eggs.sh"))        
         layout.addWidget(self.btn_release)
 
         self.label_user = QLabel("Bereinigung")
@@ -135,14 +122,13 @@ class MyWidget(QWidget):
 
         # Setze das Layout für das Hauptfenster
         self.setLayout(layout)
-        self.setStyleSheet(self.ssbtn1)
+        self.setStyleSheet(self.sssgrau)
         self.setWindowTitle('ComboBox Beispiel')
         self.setGeometry(pos_x, pos_y,0,0)
         self.setWindowIcon(QIcon.fromTheme('settings'))  # Setze das systemweite Theme-Icon als Fenstericon
         self.setWindowTitle("X-Live easyeggs")
         self.setMinimumHeight(hoehe)  # Festlegen der Größe auf 600x400 Pixel
-        self.setFixedWidth(breite)
-        
+        self.setFixedWidth(breite) 
         self.show()
         os.system("bash -c clear")
         os.system("echo && echo 'X-Live easyeggs erfolgreich gestartet' && echo")

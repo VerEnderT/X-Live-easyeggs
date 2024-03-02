@@ -1,5 +1,5 @@
 Package: X-Live-easyeggs
-Version: 0.1.0
+Version: 0.1.2
 Depends: python3 , python3-pyqt5
 Maintainer: VerEnderT
 Architecture: all
