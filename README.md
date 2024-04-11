@@ -2,8 +2,8 @@
 
 aktuell nicht für systeme mit kde-plasma kompatible !!!
 
-Eine Grafische Vereinfachung als erweiterung für Penguins-Eggs
-Schnell und Einfach Debian basierte Modifizierte Linux Isos erstellen.
+ Eine grafische Vereinfachung als Erweiterung für Penguins Eggs. 
+ Erstellen Sie schnell und einfach Debian-basierte modifizierte Linux-ISOs.
 
 
 currently not compatible for systems with kde-plasma!!!
