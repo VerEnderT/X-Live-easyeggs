@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1.2
+Type=Application
+Name=EasyEggs 
+Exec=easyeggs
+Icon=easyeggs
+Categories=Utility;
+Keywords=eggs;ei;iso;clone;klon;
+StartupNotify=true
+X-GNOME-UsesNotifications=true
