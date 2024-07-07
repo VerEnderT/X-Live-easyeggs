@@ -19,10 +19,3 @@ echo "penguins-eggs-latest_amd64.deb wird heruntergeladen"
 curl -L -o /tmp/penguins-eggs-latest_amd64.deb $DOWNLOAD_URL
 
 echo "Download abgeschlossen: penguins-eggs-latest_amd64.deb"
-
-
-echo "penguins-eggs-latest_amd64.deb wird installiert"
-
-sudo apt install /tmp/penguins-eggs-latest_amd64.deb -y
-
-sudo rm /tmp/penguins-eggs-latest_amd64.deb
