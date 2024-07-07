@@ -1,12 +1,19 @@
 # X-Live easyeggs
 
-aktuell nicht für systeme mit kde-plasma kompatible !!!
 
- Eine grafische Vereinfachung als Erweiterung für Penguins Eggs. 
- Erstellen Sie schnell und einfach Debian-basierte modifizierte Linux-ISOs.
+Eine grafische Vereinfachung als Erweiterung für Penguins Eggs. 
+Erstellen Sie schnell und einfach Debian-basierte modifizierte Linux-ISOs.
 
-
-currently not compatible for systems with kde-plasma!!!
+Getestet auf:
+- Debian 12 Xfce
+- Kubuntu 24.04
+- Linux Mint 21.3
 
 A graphical simplification as an extension for Penguins Eggs
 Quickly and easily create Debian based modified Linux ISOs.
+
+
+tested on:
+- Debian 12 Xfce
+- Kubuntu 24.04
+- Linux Mint 21.3
