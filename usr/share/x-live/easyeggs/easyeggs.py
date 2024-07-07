@@ -83,6 +83,14 @@ class SudoApp(QWidget):
             border: 0px solid #333333;
             color: white;
             }
+            QLineEdit {
+            font-size: """ + str(sts) + """px; 
+            text-align: centre;      
+            border-radius: """+ str(int(8*self.faktor))+""";
+            background: rgba(80,80, 80, 0);
+            border: 1px solid #333333;
+            color: white;
+            }
             QPushButton:hover {
             font-size: """ + str(int(int(sts)/14*16)) + """px;  
             background-color: #1b1b1b;
@@ -211,9 +219,9 @@ class SudoApp(QWidget):
         self.updatelabel.hide()
 
         # Widgets für easyeggs    
-        self.labelDistroSettings = QLabel(self)
-        self.labelDistroSettings.setText("Einstellungen für eigene Iso >")
-        self.labelDistroSettings.setStyleSheet(self.style_big)
+        self.labelTitelBig = QLabel(self)
+        self.labelTitelBig.setText("Einstellungen für eigene Iso >")
+        self.labelTitelBig.setStyleSheet(self.style_big)
 
         self.inputDistro = QLineEdit(self)
         self.inputDistro.setPlaceholderText(self.distro_name)
@@ -333,7 +341,7 @@ class SudoApp(QWidget):
         layout.addWidget(self.calamaresInstallBtn)
         layout.addStretch(0)
         layout.addLayout(configbtnlayout)
-        layout.addWidget(self.labelDistroSettings)
+        layout.addWidget(self.labelTitelBig)
         layout.addLayout(datalayout)
         layout.addStretch(0)
         layout.addWidget(self.startUpdateBtn)
@@ -343,7 +351,8 @@ class SudoApp(QWidget):
         # hauptlayout setzen
         self.setLayout(layout)
         if not check_eggs: self.no_eggs()
-
+        if check_eggs and self.eggs_conf == []:
+            self.make_eggs_conf()
         
     
     def showhidebtn(self):
@@ -440,6 +449,7 @@ class SudoApp(QWidget):
         self.fin = self.fin + 1
         self.tasklist()
 
+
     def no_eggs(self):
         self.passwordInput.show()
         self.inputDistro.hide()
@@ -460,7 +470,7 @@ class SudoApp(QWidget):
         self.calThemeBtn.hide()
         self.calamaresInstallBtn.hide()
         
-        self.labelDistroSettings.setText("\n\t\tPenguins Egss ist noch nicht installiert\n\tmehr infos zu Penguins Eggs auf https://penguins-eggs.net \n\n\tzum herunterladen und installieren bitte den knopf drücken\n")
+        self.labelTitelBig.setText("\n\t\tPenguins Egss ist noch nicht installiert\n\tmehr infos zu Penguins Eggs auf https://penguins-eggs.net \n\n\tzum herunterladen und installieren bitte den knopf drücken\n")
         self.startUpdateBtn.setText("Penguins Eggs herunterladen und installieren")
 
         self.startUpdateBtn.clicked.disconnect(self.create_iso)
@@ -468,7 +478,33 @@ class SudoApp(QWidget):
         #self.startUpdateBtn.clicked.connect(lambda: os.system("xdg-open https://sourceforge.net/projects/penguins-eggs/files/DEBS/"))
         #self.startUpdateBtn.clicked.connect(self.eggs_install)
         self.fin = 99
-        print(self.fin)
+
+    def make_eggs_conf(self):
+        self.passwordInput.show()
+        self.inputDistro.hide()
+        self.inputUser.hide()
+        self.inputUserPw.hide()
+        self.inputRootPw.hide()
+        self.labelDistro.hide()
+        self.labelUser.hide()
+        self.labelUserPw.hide()
+        self.labelRootPw.hide()
+        self.checkUserData.hide()
+        self.checkTempData.hide()
+        self.checkIsoClean.hide()
+        self.outputBtn.show()
+        self.labelInfoShort.hide()
+        self.updatelabel.hide()
+        self.liveBootBtn.hide()
+        self.calThemeBtn.hide()
+        self.calamaresInstallBtn.hide()
+        
+        self.labelTitelBig.setText("\n\t\tPenguins Egss ist nstalliert\n\n\tmuss aber noch konfiguriert werden\n")
+        self.startUpdateBtn.setText("Penguins Eggs einrichten")
+
+        self.startUpdateBtn.clicked.disconnect(self.create_iso)
+        self.startUpdateBtn.clicked.connect(self.checkSudoPassword)
+        self.fin = 50
 
     def calamaresInstall(self):
         self.passwordInput.show()
@@ -491,7 +527,7 @@ class SudoApp(QWidget):
         
         self.startUpdateBtn.clicked.disconnect(self.create_iso)
         self.startUpdateBtn.clicked.connect(self.checkSudoPassword)
-        self.labelDistroSettings.setText("\nDer Grafische System Installer Calamares ist noch nicht installiert\n\n\tzum installieren bitte den knopf drücken\n")
+        self.labelTitelBig.setText("\nDer Grafische System Installer Calamares ist noch nicht installiert\n\n\tzum installieren bitte den knopf drücken\n")
         self.startUpdateBtn.setText("Calamares installieren")
         self.fin = 21
 
@@ -502,7 +538,7 @@ class SudoApp(QWidget):
         self.updatelabel.setMovie(self.movie)
         self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
         self.movie.start()
-        self.labelDistroSettings.setText("\nPenguins Eggs wird heruntergeladen. \n\nim Anschluss wird Penguin Eggs installiert \n")
+        self.labelTitelBig.setText("\nPenguins Eggs wird heruntergeladen. \n\nim Anschluss wird Penguin Eggs installiert \n")
         self.runSudoCommand("/usr/share/x-live/easyeggs/eggs-download.sh")
 
     def calamares_theme(self):
@@ -528,11 +564,13 @@ class SudoApp(QWidget):
             self.runSudoCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/")
         if self.fin == 40:
             self.runSudoCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/calamares/branding/")
+        if self.fin == 50:
+            self.runSudoCommand("eggs config --nointeractive")
         if self.fin ==99:
             self.eggs_install()
 
         if self.fin ==100:
-            self.labelDistroSettings.setText("\nPenguins Eggs wurde erfolgreich heruntergeladen\n\nBitte Programm nicht schließen es wird installiet\n")
+            self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich heruntergeladen\n\nBitte Programm nicht schließen es wird installiet\n")
             self.movie = QMovie("create.gif")
             self.updatelabel.setMovie(self.movie)
             self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
@@ -545,14 +583,14 @@ class SudoApp(QWidget):
         if self.fin ==102:
             self.check_eggs = self.com("which eggs").replace("\n","")
             if self.check_eggs:
-                self.labelDistroSettings.setText("\nPenguins Eggs wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
+                self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
                 self.movie = QMovie("sucess.gif")
                 self.updatelabel.setMovie(self.movie)
                 self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
                 self.movie.start()
                 self.runSudoCommand("rm /tmp/penguins-eggs-latest_amd64.deb")
             else:
-                self.runSudoCommand("sudo dpkg --configure -a")
+                self.runSudoCommand("/usr/share/x-live/easyeggs/notfall-install.sh")
 
         if self.fin ==103:
             self.runSudoCommand("apt install /tmp/penguins-eggs-latest_amd64.deb -y")
@@ -561,14 +599,14 @@ class SudoApp(QWidget):
         if self.fin ==104:
             self.check_eggs = self.com("which eggs").replace("\n","")
             if self.check_eggs:
-                self.labelDistroSettings.setText("\nPenguins Eggs wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
+                self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
                 self.movie = QMovie("sucess.gif")
                 self.updatelabel.setMovie(self.movie)
                 self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
                 self.movie.start()
                 self.runSudoCommand("rm /tmp/penguins-eggs-latest_amd64.deb")
             else:
-                self.labelDistroSettings.setText("\nPenguins Eggs wurde NICHT installiert\n\nirgendwas ist schiefgelaufen \n")
+                self.labelTitelBig.setText("\nPenguins Eggs wurde NICHT installiert\n\nirgendwas ist schiefgelaufen \n")
                 self.updatelabel.hide()
 
 
@@ -579,7 +617,7 @@ class SudoApp(QWidget):
             self.updatelabel.setMovie(self.movie)
             self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
             self.movie.start()    
-            self.labelDistroSettings.setText("\nCalamares wird installiert. \n\nBitte warten sie bis zum Ende der Installation \n")        
+            self.labelTitelBig.setText("\nCalamares wird installiert. \n\nBitte warten sie bis zum Ende der Installation \n")        
             self.runSudoCommand("apt update")
 
         if self.fin ==22:     
@@ -588,7 +626,7 @@ class SudoApp(QWidget):
         if self.fin ==23:
             self.check_calamares = self.com("which calamares").replace("\n","")
             if self.check_calamares:
-                self.labelDistroSettings.setText("\nCalamares wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
+                self.labelTitelBig.setText("\nCalamares wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
                 self.movie = QMovie("sucess.gif")
                 self.updatelabel.setMovie(self.movie)
                 self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
@@ -614,7 +652,7 @@ class SudoApp(QWidget):
             self.liveBootBtn.hide()
             self.calThemeBtn.hide()
             self.updatelabel.show()
-            self.labelDistroSettings.setText("Deine Iso wird erstellt")
+            self.labelTitelBig.setText("Deine Iso wird erstellt")
             self.labelInfoShort.setText(f"Distroname:\t{self.distro_name}\nBenutzername:\t{self.user_name}\nBenutzerpasswort:\t{self.user_passwd}\nRootpasswort:\t{self.eggs_root_passwd}")
             
             self.adjustSize()
@@ -666,7 +704,7 @@ class SudoApp(QWidget):
                 self.updatelabel.setMovie(self.movie)
                 self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
                 self.movie.start()
-                self.labelDistroSettings.setText("Deine Iso wurde erstellt")
+                self.labelTitelBig.setText("Deine Iso wurde erstellt")
                 self.finBtn.show()
                 self.adjustSize()
                 
