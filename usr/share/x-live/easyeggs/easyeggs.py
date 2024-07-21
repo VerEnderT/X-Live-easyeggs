@@ -561,9 +561,18 @@ class SudoApp(QWidget):
         print(self.fin)
 
         if self.fin == 30:
-            self.runSudoCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/")
+            xdg_current_desktop = os.getenv('XDG_CURRENT_DESKTOP')
+            print()
+            if xdg_current_desktop =="KDE":
+                self.runCommand("/usr/share/x-live/easyeggs/dolphin-live.sh")
+            else:
+                self.runCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/")
         if self.fin == 40:
-            self.runSudoCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/calamares/branding/")
+            xdg_current_desktop = os.getenv('XDG_CURRENT_DESKTOP')
+            if xdg_current_desktop =="KDE":
+                self.runCommand("/usr/share/x-live/easyeggs/dolphin-calamares.sh")
+            else:
+                self.runSudoCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/calamares/branding/")
         if self.fin == 50:
             self.runSudoCommand("eggs config --nointeractive")
         if self.fin ==99:
