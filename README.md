@@ -18,5 +18,5 @@ tested on:
 - Kubuntu 24.04
 - Linux Mint 21.3 Cinnamon und xfce
 
-![]('/easyeggs-view.png')
+![EASYEGGS](easyeggs-view.png)
 
