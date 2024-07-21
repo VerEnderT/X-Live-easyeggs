@@ -18,5 +18,7 @@ tested on:
 - Kubuntu 24.04
 - Linux Mint 21.3 Cinnamon und xfce
 
+---
+
 ![EASYEGGS](easyeggs-view.png)
 
