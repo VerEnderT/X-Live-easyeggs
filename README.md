@@ -6,6 +6,7 @@ Erstellen Sie schnell und einfach Debian-basierte modifizierte Linux-ISOs.
 
 Getestet auf:
 - Debian 12 Xfce
+- Xubuntu 24.04
 - Kubuntu 24.04
 - Linux Mint 21.3 Cinnamon und xfce 
 
