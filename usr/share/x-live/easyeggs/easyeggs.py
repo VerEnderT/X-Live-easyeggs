@@ -665,7 +665,7 @@ class SudoApp(QWidget):
                 if self.checkUserData.isChecked():
                     self.log = self.log + "\n Nutzer Daten werden Kopiert !! \n\n"
                     self.outputTextEdit.setText(self.log)
-                    self.runCommand("/usr/share/x-live/easyeggs/copy_data.sh")
+                    self.runSudoCommand("/usr/share/x-live/easyeggs/copy_data.sh")
                     #print("UserData ist gesetzt")
                 else:
                     #print("UserData ist nicht gesetzt")

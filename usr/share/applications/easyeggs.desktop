@@ -8,3 +8,4 @@ Categories=Utility;
 Keywords=eggs;ei;iso;clone;klon;
 StartupNotify=true
 X-GNOME-UsesNotifications=true
+GenericName=erstelle deine eigene Iso
