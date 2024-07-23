@@ -1,6 +1,7 @@
 # X-Live easyeggs
 
-##Deutsch:
+## Deutsch
+
 Eine grafische Vereinfachung als Erweiterung für Penguins Eggs. 
 Erstellen Sie schnell und einfach Debian-basierte modifizierte Linux-ISOs.
 
@@ -13,8 +14,10 @@ Getestet auf:
 - Kubuntu 24.04 install mit Calamares klappt nicht immer (eigener grafischer Installer ist geplant)
 
 - Linux Mint 21.3 Cinnamon und xfce 
+---
 
-##English
+## English
+
 A graphical simplification as an extension for Penguins Eggs
 Quickly and easily create Debian based modified Linux ISOs.
 
