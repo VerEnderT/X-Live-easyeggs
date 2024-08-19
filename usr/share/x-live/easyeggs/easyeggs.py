@@ -5,7 +5,7 @@ import shutil
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit, QMessageBox, QCheckBox
 from PyQt5.QtCore import QProcess, Qt, QSize, QProcessEnvironment, QRegExp
-from PyQt5.QtGui import QMovie, QIcon, QRegExpValidator
+from PyQt5.QtGui import QMovie, QIcon, QRegExpValidator, QTextCursor
 import subprocess
 
 # Pfad zum gewünschten Arbeitsverzeichnis # Das Arbeitsverzeichnis festlegen
@@ -32,14 +32,14 @@ class SudoApp(QWidget):
         self.vmlinuz = "/boot/vmlinuz-" + self.kernel
         check_eggs = self.com("which eggs").replace("\n","")
         check_calamares = self.com("which calamares").replace("\n","")
-        print(check_eggs)
-        print(check_calamares)
+        #print(check_eggs)
+        #print(check_calamares)
         self.haken =  "✓"
         self.fin = 0
-        self.log = ""
         
         faktor = app.desktop().height()/780
-        breite = int(750 * faktor)
+        breite = int(550 * faktor)
+        self.breite = breite        
         hoehe = int(100 * faktor)
         bts=int(16 * faktor)
         sts=int(14 * faktor)
@@ -317,7 +317,7 @@ class SudoApp(QWidget):
         checkboxlayout.addWidget(self.checkTempData)
         checkboxlayout.addWidget(self.checkIsoClean)
         
-        datalayout.addStretch(0)
+        #datalayout.addStretch(0)
         datalayout.addLayout(labellayout)
         datalayout.addLayout(inputlayout)
         datalayout.addStretch(1)
@@ -406,10 +406,10 @@ class SudoApp(QWidget):
         process.start("sudo", ["-S", "bash", "-c", command])
         process.write((self.sudoPassword + "\n").encode())
         process.setProcessChannelMode(QProcess.MergedChannels)
-        process.readyReadStandardOutput.connect(lambda: self.handle_output(process))
+        process.readyRead.connect(lambda: self.handle_output(process))
         process.finished.connect(self.handle_finished)
         error_output = process.readAllStandardError().data().decode()
-        print("befehl:" + str(command))
+        #print("befehl:" + str(command))
         
 
     def com(self, command):
@@ -429,20 +429,23 @@ class SudoApp(QWidget):
         #print(command)
 
         process.setProcessChannelMode(QProcess.MergedChannels)
-        process.readyReadStandardOutput.connect(lambda: self.handle_output(process))
+        process.readyRead.connect(lambda: self.handle_output(process))
         process.finished.connect(self.handle_finished)
         error_output = process.readAllStandardError().data().decode()
         #print(error_output)
 
     def readOutput(self, process):
         output = process.readAll().data().decode()
-        self.outputTextEdit.append(output)
+        self.outputTextEdit.moveCursor(QTextCursor.End)
+        self.outputTextEdit.insertPlainText(str(output))
+        self.outputTextEdit.moveCursor(QTextCursor.End)
         
     def handle_output(self, process):
         output = process.readAllStandardOutput().data()
         output_str = str(output, 'utf-8')  # Verwenden Sie das richtige Encoding für Ihren Fall
-        self.log = self.log + output_str
-        self.outputTextEdit.setText(self.log)
+        self.outputTextEdit.moveCursor(QTextCursor.End)
+        self.outputTextEdit.insertPlainText(str(output_str))
+        self.outputTextEdit.moveCursor(QTextCursor.End)
         self.status.setText(output_str.replace("\n",""))
 
     def handle_finished(self):
@@ -558,15 +561,14 @@ class SudoApp(QWidget):
         self.checkSudoPassword()
 
     def tasklist(self):
-        print(self.fin)
+        #print(self.fin)
 
         if self.fin == 30:
             xdg_current_desktop = os.getenv('XDG_CURRENT_DESKTOP')
-            print()
             if xdg_current_desktop =="KDE":
                 self.runCommand("/usr/share/x-live/easyeggs/dolphin-live.sh")
             else:
-                self.runCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/")
+                self.runSudoCommand("xdg-open /etc/penguins-eggs.d/addons/eggs/theme/livecd/")
         if self.fin == 40:
             xdg_current_desktop = os.getenv('XDG_CURRENT_DESKTOP')
             if xdg_current_desktop =="KDE":
@@ -662,7 +664,7 @@ class SudoApp(QWidget):
             self.calThemeBtn.hide()
             self.updatelabel.show()
             self.labelTitelBig.setText("Deine Iso wird erstellt")
-            self.labelInfoShort.setText(f"Distroname:\t{self.distro_name}\nBenutzername:\t{self.user_name}\nBenutzerpasswort:\t{self.user_passwd}\nRootpasswort:\t{self.eggs_root_passwd}")
+            self.labelInfoShort.setText(f"Distroname:\t{self.distro_name}\nBenutzername:\t{self.user_name}\nPasswort:\t{self.user_passwd}\nRootpasswort:\t{self.eggs_root_passwd}")
             
             self.adjustSize()
 
@@ -672,8 +674,10 @@ class SudoApp(QWidget):
 
             if self.fin == 1:
                 if self.checkUserData.isChecked():
-                    self.log = self.log + "\n Nutzer Daten werden Kopiert !! \n\n"
-                    self.outputTextEdit.setText(self.log)
+                    output = "\n Nutzer Daten werden Kopiert !! \n\n"
+                    self.outputTextEdit.moveCursor(QTextCursor.End)
+                    self.outputTextEdit.insertPlainText(output)
+                    self.outputTextEdit.moveCursor(QTextCursor.End)
                     self.runSudoCommand("/usr/share/x-live/easyeggs/copy_data.sh")
                     #print("UserData ist gesetzt")
                 else:
@@ -682,8 +686,10 @@ class SudoApp(QWidget):
                 
             if self.fin == 2:
                 if self.checkTempData.isChecked():
-                    self.log = self.log + "\n Daten werden bereinigt !! \n\n"
-                    self.outputTextEdit.setText(self.log)
+                    output =  "\n Daten werden bereinigt !! \n\n"
+                    self.outputTextEdit.moveCursor(QTextCursor.End)
+                    self.outputTextEdit.insertPlainText(output)
+                    self.outputTextEdit.moveCursor(QTextCursor.End)
                     self.runSudoCommand("/usr/share/x-live/easyeggs/clean_data.sh")
                     #print("TempData ist gesetzt")
                 else:
@@ -692,8 +698,10 @@ class SudoApp(QWidget):
                 
             if self.fin == 3:
                 if self.checkIsoClean.isChecked():
-                    self.log = self.log + "\n Alte Isos werden entfernt !! \n\n"
-                    self.outputTextEdit.setText(self.log)
+                    output = "\n Alte Isos werden entfernt !! \n\n"
+                    self.outputTextEdit.moveCursor(QTextCursor.End)
+                    self.outputTextEdit.insertPlainText(output)
+                    self.outputTextEdit.moveCursor(QTextCursor.End)
                     self.runSudoCommand("eggs kill --nointeractive")
                     #print("IsoClean ist gesetzt")
                 else:
@@ -702,8 +710,10 @@ class SudoApp(QWidget):
                 
             
             if self.fin == 4:
-                self.log = self.log + "\n Neues Iso wird Erstellt !! \n\n"
-                self.outputTextEdit.setText(self.log)
+                output = "\n Neues Iso wird Erstellt !! \n\n"
+                self.outputTextEdit.moveCursor(QTextCursor.End)
+                self.outputTextEdit.insertPlainText(output)
+                self.outputTextEdit.moveCursor(QTextCursor.End)
                 self.runSudoCommand("eggs produce --nointeractive --standard --noicon")
                 #self.fin = 6            
                 
@@ -715,10 +725,9 @@ class SudoApp(QWidget):
                 self.movie.start()
                 self.labelTitelBig.setText("Deine Iso wurde erstellt")
                 self.finBtn.show()
+                self.setFixedWidth(self.breite)
                 self.adjustSize()
-                
                 self.status.setText("Iso-Erstellung abgeschlossen.")
-                self.adjustSize()
 
 
     # Funktion zum Lesen der Datei
