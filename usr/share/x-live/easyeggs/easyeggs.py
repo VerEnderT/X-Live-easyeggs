@@ -320,7 +320,7 @@ class SudoApp(QWidget):
         #datalayout.addStretch(0)
         datalayout.addLayout(labellayout)
         datalayout.addLayout(inputlayout)
-        datalayout.addStretch(1)
+        #datalayout.addStretch(1)
         datalayout.addWidget(self.labelInfoShort)
         datalayout.addStretch(1)
         datalayout.addWidget(self.updatelabel)
@@ -473,13 +473,13 @@ class SudoApp(QWidget):
         self.calThemeBtn.hide()
         self.calamaresInstallBtn.hide()
         
-        self.labelTitelBig.setText("\n\t\tPenguins Egss ist noch nicht installiert\n\tmehr infos zu Penguins Eggs auf https://penguins-eggs.net \n\n\tzum herunterladen und installieren bitte den knopf drücken\n")
+        self.labelTitelBig.setTextFormat(Qt.RichText) 
+        self.labelTitelBig.setText('Penguins Egss ist noch nicht installiert !!<br>mehr infos zu Penguins Eggs auf <a href="https://penguins-eggs.net">https://penguins-eggs.net</a><br>zum herunterladen und installieren bitte den knopf drücken\n')
+        self.labelTitelBig.setOpenExternalLinks(True) 
         self.startUpdateBtn.setText("Penguins Eggs herunterladen und installieren")
 
         self.startUpdateBtn.clicked.disconnect(self.create_iso)
         self.startUpdateBtn.clicked.connect(self.checkSudoPassword)
-        #self.startUpdateBtn.clicked.connect(lambda: os.system("xdg-open https://sourceforge.net/projects/penguins-eggs/files/DEBS/"))
-        #self.startUpdateBtn.clicked.connect(self.eggs_install)
         self.fin = 99
 
     def make_eggs_conf(self):
@@ -501,7 +501,7 @@ class SudoApp(QWidget):
         self.liveBootBtn.hide()
         self.calThemeBtn.hide()
         self.calamaresInstallBtn.hide()
-        
+        self.labelTitelBig.setTextFormat(Qt.PlainText)  
         self.labelTitelBig.setText("\n\t\tPenguins Egss ist nstalliert\n\n\tmuss aber noch konfiguriert werden\n")
         self.startUpdateBtn.setText("Penguins Eggs einrichten")
 
@@ -541,7 +541,8 @@ class SudoApp(QWidget):
         self.updatelabel.setMovie(self.movie)
         self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
         self.movie.start()
-        self.labelTitelBig.setText("\nPenguins Eggs wird heruntergeladen. \n\nim Anschluss wird Penguin Eggs installiert \n")
+        self.labelTitelBig.setTextFormat(Qt.PlainText)  
+        self.labelTitelBig.setText("\nPenguins Eggs wird heruntergeladen. \nim Anschluss wird Penguin Eggs installiert")
         self.runSudoCommand("/usr/share/x-live/easyeggs/eggs-download.sh")
 
     def calamares_theme(self):
@@ -581,7 +582,7 @@ class SudoApp(QWidget):
             self.eggs_install()
 
         if self.fin ==100:
-            self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich heruntergeladen\n\nBitte Programm nicht schließen es wird installiet\n")
+            self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich heruntergeladen\nBitte Programm nicht schließen es wird installiet")
             self.movie = QMovie("create.gif")
             self.updatelabel.setMovie(self.movie)
             self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
@@ -594,7 +595,7 @@ class SudoApp(QWidget):
         if self.fin ==102:
             self.check_eggs = self.com("which eggs").replace("\n","")
             if self.check_eggs:
-                self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
+                self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich installiert\nBitte Programm schließen und erneut starten")
                 self.movie = QMovie("sucess.gif")
                 self.updatelabel.setMovie(self.movie)
                 self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
@@ -610,14 +611,14 @@ class SudoApp(QWidget):
         if self.fin ==104:
             self.check_eggs = self.com("which eggs").replace("\n","")
             if self.check_eggs:
-                self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich installiert\n\nBitte Programm schließen und erneut starten \n")
+                self.labelTitelBig.setText("\nPenguins Eggs wurde erfolgreich installiert\nBitte Programm schließen und erneut starten")
                 self.movie = QMovie("sucess.gif")
                 self.updatelabel.setMovie(self.movie)
                 self.movie.setScaledSize(QSize(int(50*self.faktor), int(50*self.faktor)))
                 self.movie.start()
                 self.runSudoCommand("rm /tmp/penguins-eggs-latest_amd64.deb")
             else:
-                self.labelTitelBig.setText("\nPenguins Eggs wurde NICHT installiert\n\nirgendwas ist schiefgelaufen \n")
+                self.labelTitelBig.setText("\nPenguins Eggs wurde NICHT installiert\nirgendwas ist schiefgelaufen")
                 self.updatelabel.hide()
 
 

@@ -1,11 +1,12 @@
 Package: x-live-easyeggs
-Version: 0.1.7
+Version: 0.1.8
 Depends: python3 , python3-pyqt5, xdg-utils, curl, bleachbit
 Maintainer: VerEnderT <chaosz932@gmail.com>
 Architecture: all
 Homepage: http://verlinuxt.sytes.net
 Section: utils
 Priority: optional
+Installed-Size: 761kb
 Description: Gui to make penguins eggs easier to handle
  Deutsch: ->>
  Eine grafische Vereinfachung als Erweiterung für Penguins Eggs. 
