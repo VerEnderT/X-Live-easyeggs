@@ -66,8 +66,8 @@ class SudoApp(QWidget):
             
             }
             QCheckBox:Indicator:Unchecked {
-            border: 2px solid white;
-            background-color: #23252e;
+            border: 2px solid """+ self.theme_color + """;
+            background-color: """+ self.theme_bcolor + """;
             }
             QPushButton {
             font-size: """ + str(sts) + """px; 
@@ -87,7 +87,7 @@ class SudoApp(QWidget):
             border-radius: """+ str(int(8*self.faktor))+""";
             background: rgba(80,80, 80, 0);
             border: 0px solid #333333;
-            color: white;
+            color: """+ self.theme_color + """;
             }
             QLineEdit {
             font-size: """ + str(sts) + """px; 
@@ -95,7 +95,7 @@ class SudoApp(QWidget):
             border-radius: """+ str(int(8*self.faktor))+""";
             background: rgba(80,80, 80, 0);
             border: 1px solid #333333;
-            color: white;
+            color: """+ self.theme_color + """;
             }
             QPushButton:hover {
             font-size: """ + str(int(int(sts)/14*16)) + """px;  
@@ -109,28 +109,6 @@ class SudoApp(QWidget):
             background-color: """+self.theme_bcolor+""";
             color: """+self.theme_color+""";
             }
-            QCheckBox:Indicator:Checked {
-            border: 2px solid white;
-            border-radius: """ + str(int(sts/2)) + """px;
-            background-color: green;
-            
-            }
-            QCheckBox:Indicator:Unchecked {
-            border: 2px solid white;
-            background-color: #23252e;
-            }
-            QPushButton {
-            font-size: """ + str(int(sts*1.4)) + """px; 
-            text-align: left;      
-            border-radius: """+ str(int(8*self.faktor))+""";
-            background-color: #33353e;
-            border: 2px solid #33353e;
-            padding-top: 2px;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-bottom: 2px;
-            color: white;
-            }
             QLabel {
             font-size: """ + str(int(sts*1.4)) + """px; 
             text-align: centre;      
@@ -138,11 +116,6 @@ class SudoApp(QWidget):
             background-color: """ + self.theme_bcolor + """;
             color: """+self.theme_color+""";
             border: 0px solid #333333;
-            }
-            QPushButton:hover {
-            font-size: """ + str(int(int(sts)*1.6)) + """px;  
-            background-color: #1b1b1b;
-            border: 2px solid #1b1b1b;
             }
             """)
         

@@ -138,7 +138,7 @@ class ThemeManager:
 
                 if os.path.exists(css_file_path):
                     theme_bcolor = self.extract_color_from_css(css_file_path, 'background-color')
-                    theme_color = self.extract_color_from_css(css_file_path, 'color')
+                    theme_color = self.extract_color_from_css(css_file_path, '  color')
 
                     # Setze die Farben, wenn gefunden
                     if theme_bcolor:
