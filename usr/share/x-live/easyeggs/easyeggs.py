@@ -3,6 +3,7 @@
 import os
 import shutil
 import sys
+import re
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit, QMessageBox, QCheckBox
 from PyQt5.QtCore import QProcess, Qt, QSize, QProcessEnvironment, QRegExp
 from PyQt5.QtGui import QMovie, QIcon, QRegExpValidator, QTextCursor
@@ -20,7 +21,7 @@ class SudoApp(QWidget):
         self.initUI()
         self.sudoPassword = ""
 
-    def initUI(self):     
+    def initUI(self):   
         self.eggs_conf_path ="/etc/penguins-eggs.d/eggs.yaml"
         self.eggs_conf = self.read_file(self.eggs_conf_path) 
         self.user_name = self.get_data(self.eggs_conf, "user_opt")
@@ -47,11 +48,14 @@ class SudoApp(QWidget):
         xpos=int(100*faktor)
         ypos=int(70*faktor)
         
+        self.theme_bcolor= "#23252e"
+        self.theme_color= "white"
+        self.background_color()
       
         self.style=str("""
             QWidget {
-            background-color: #23252e;
-            color: white;
+            background-color: """+ self.theme_bcolor + """;
+            color: """+self.theme_color+""";
             }
             QCheckBox:Indicator:Checked {
             border: 2px solid white;
@@ -100,8 +104,8 @@ class SudoApp(QWidget):
         
         self.style_big=str("""
             QWidget {
-            background-color: #23252e;
-            color: white;
+            background-color: """+self.theme_bcolor+""";
+            color: """+self.theme_color+""";
             }
             QCheckBox:Indicator:Checked {
             border: 2px solid white;
@@ -129,9 +133,9 @@ class SudoApp(QWidget):
             font-size: """ + str(int(sts*1.4)) + """px; 
             text-align: centre;      
             border-radius: """+ str(int(8*self.faktor))+""";
-            background: rgba(80,80, 80, 0);
+            background-color: """ + self.theme_bcolor + """;
+            color: """+self.theme_color+""";
             border: 0px solid #333333;
-            color: white;
             }
             QPushButton:hover {
             font-size: """ + str(int(int(sts)*1.6)) + """px;  
@@ -354,6 +358,7 @@ class SudoApp(QWidget):
         if check_eggs and self.eggs_conf == []:
             self.make_eggs_conf()
         
+        self.background_color()  
     
     def showhidebtn(self):
         if self.outputTextEdit.isVisible():
@@ -454,6 +459,7 @@ class SudoApp(QWidget):
 
 
     def no_eggs(self):
+        self.background_color()  
         self.passwordInput.show()
         self.inputDistro.hide()
         self.inputUser.hide()
@@ -783,6 +789,79 @@ class SudoApp(QWidget):
         # Validator mit dem Muster erstellen
         validator = QRegExpValidator(regexp, line_edit)
         line_edit.setValidator(validator)
+
+
+    # Farbprofil abrufen und anwenden
+
+    def get_current_theme(self):
+        try:
+            # Versuche, das Theme mit xfconf-query abzurufen
+            result = subprocess.run(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName'], capture_output=True, text=True)
+            theme_name = result.stdout.strip()
+            if theme_name:
+                return theme_name
+        except FileNotFoundError:
+            pass
+            #print("xfconf-query nicht gefunden. Versuche gsettings.")
+        except Exception as e:
+            #print(f"Error getting theme with xfconf-query: {e}")
+            pass
+        try:
+            # Fallback auf gsettings, falls xfconf-query nicht vorhanden ist
+            result = subprocess.run(['gsettings', 'get', 'org.gnome.desktop.interface', 'gtk-theme'], capture_output=True, text=True)
+            theme_name = result.stdout.strip().strip("'")
+            if theme_name:
+                return theme_name
+        except Exception as e:
+            #print(f"Error getting theme with gsettings: {e}")
+            pass
+    
+        return None
+
+    def extract_color_from_css(self,css_file_path, color_name):
+        try:
+            with open(css_file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                #print(content)
+                # Muster zum Finden der Farbe
+                pattern = r'{}[\s:]+([#\w]+)'.format(re.escape(color_name))
+                match = re.search(pattern, content)
+                if match:
+                    return match.group(1)
+                return None
+        except IOError as e:
+            #print(f"Error reading file: {e}")
+            return None
+            
+            
+    def background_color(self):
+        theme_name = self.get_current_theme()
+        if theme_name:
+            #print(f"Current theme: {theme_name}")
+
+            # Pfad zur GTK-CSS-Datei des aktuellen Themes
+            css_file_path = f'/usr/share/themes/{theme_name}/gtk-3.0/gtk.css'
+
+            if os.path.exists(css_file_path):
+                theme_bcolor = self.extract_color_from_css(css_file_path, ' background-color')
+                theme_color = self.extract_color_from_css(css_file_path, ' color')
+                if theme_bcolor != None:
+                    self.theme_bcolor=theme_bcolor                
+                if theme_color != None:
+                    self.theme_color=theme_color                
+
+
+                #print(f"background: {theme_bcolor};color: {theme_color}")
+                #print(f"background: {self.theme_bcolor};color: {self.theme_color}")
+
+            else:
+                pass
+                #print(f"CSS file not found: {css_file_path}")
+        else:
+            pass
+            #print("Unable to determine the current theme.")
+
+
 
 
 if __name__ == '__main__':
