@@ -1,17 +1,18 @@
 #!/bin/bash
 
 # URL der Projektseite
-BASE_URL="https://sourceforge.net/projects/penguins-eggs/files/DEBS/"
+BASE_URL="https://sourceforge.net/projects/penguins-eggs/files/Packages/DEBS/"
+#BASE_URL="https://sourceforge.net/projects/penguins-eggs/files/DEBS/"
 FILE_PATTERN="penguins-eggs_.*_amd64.deb"
 
 # HTML der Seite herunterladen und nach JSON-Daten durchsuchen
-FILE_URL=$(curl -s $BASE_URL | grep -oP 'https://sourceforge.net/projects/penguins-eggs/files/DEBS/[^"]+')
+FILE_URL=$(curl -s $BASE_URL | grep -oP 'https://sourceforge.net/projects/penguins-eggs/files/Packages/DEBS/[^"]+')
 
 # Extrahiere die passende Datei
 MATCHING_FILE=$(echo "$FILE_URL" | grep -oP "${FILE_PATTERN}" | head -n 1)
 
 # Den genauen Download-Link erstellen
-DOWNLOAD_URL="https://sourceforge.net/projects/penguins-eggs/files/DEBS/${MATCHING_FILE}/download"
+DOWNLOAD_URL="https://sourceforge.net/projects/penguins-eggs/files/Packages/DEBS/${MATCHING_FILE}/download"
 
 echo "penguins-eggs-latest_amd64.deb wird heruntergeladen"
 
